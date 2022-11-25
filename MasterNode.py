@@ -2,7 +2,9 @@ def read_operation():
     pass
 
 
-def write_operation():
+def write_operation(f):
+    l = []
+    
     pass
 
 
