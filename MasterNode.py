@@ -4,8 +4,8 @@ def read_operation():
 
 def write_operation(f):
     l = []
-    
-    pass
+        
+    return l
 
 
 # User passes the input file to the client program to be stored in the cluster.
