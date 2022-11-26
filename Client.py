@@ -74,6 +74,25 @@ def writeop(filename):
             send_thread.start()
             # send_partition(nodes_available[i], content)
 
+def readop(filename):
+    nodes_available = mn.nodesdictread(n, filename)
+    # print(nodes_available['0'])
+    recv_thread=[]
+    for i in range(0,len(nodes_available.keys())):
+        # print("Sending data to node: ", nodes_available[i])
+        # print(nodes_available[str(i)])
+        # sending partition to the address in nodes_available with the partition name
+        recv_thread.append(threading.Thread(target=recv_partitions,args=(nodes_available[str(i)][0],nodes_available[str(i)][1],nodes_available[str(i)][2])))
+    for i in range(0,len(recv_thread)):
+        recv_thread[i].start()
+    for i in range(0,len(recv_thread)):
+        recv_thread[i].join() 
+    # for i in partitions:
+    #     a,b=i.split(' ',1)
+
+        # res=recv_thread.join()
+        # print(res)
+        # send_partition(nodes_available[i], content)
 
 
 #reading a file filename given as command line argument
@@ -85,8 +104,12 @@ if choice == 1:
     writeop(filename)
 elif choice==2:
     filename = sys.argv[1]
-    n=sys.argv[2]
-    # readop(filename)
+    n=int(sys.argv[2])
+    readop(filename)
+    partitions=sorted(partitions)
+    for i in partitions:
+        b=i.split(' ',1)
+        print(b[1])
 else:
     filename = sys.argv[1]
     mapfile = sys.argv[2]
