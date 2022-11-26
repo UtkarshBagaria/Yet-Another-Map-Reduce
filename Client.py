@@ -49,7 +49,7 @@ def writeop(filename):
         content = file.readlines()
         # content=content[0]
         l=len(content)
-        ldw=l//n
+        ldw=math.ceil(l/n)
         k=[]
         j=0
         if l>=n:
