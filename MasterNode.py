@@ -1,5 +1,7 @@
 import threading
-def nodesdict(n=2,filename="xyz"):
+import WorkerNode as w
+import json
+def nodesdictwrite(n=2,filename="xyz"):
     a=dict()
     filename, file_extension = filename.split(".")
     for i in range(n):
@@ -7,4 +9,18 @@ def nodesdict(n=2,filename="xyz"):
         connec=threading.Thread(target=w.conne,args=(a[i][0],a[i][1],a[i][2]))
         connec.start()
     return a
-import WorkerNode as w
+
+def nodesdictread(n=2,filename="xyz"):
+    a=dict()
+    # print(filename)
+    filename, file_extension = filename.split(".")
+    fw=open('metadata.txt','r')
+    for line in fw:
+        if filename in line:
+            a=json.loads(line.split(" ",1)[1])
+            # print(a)
+    for i in a:
+        connec=threading.Thread(target=w.conne,args=(a[i][0],a[i][1],a[i][2],'r'))
+        connec.start()
+        # time.sleep(1)
+    return a
