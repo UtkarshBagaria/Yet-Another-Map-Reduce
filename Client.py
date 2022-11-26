@@ -31,8 +31,10 @@ def writeop(filename):
         k=[]
         j=0
         for i in range(0,l,ldw):
-            k[j]=content[i:i+ldw]
-            j+=1
+            st=''
+            for j in range(0,ldw):
+                st=st+content[i+j]
+            k.append(st)
         nodes_available = mn.nodesdict(n, filename)
         print(content)
         for i in range(len(nodes_available.keys())):
