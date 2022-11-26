@@ -5,6 +5,8 @@ import socket
 import threading
 import math
 
+global partitions
+partitions=[]
 def send_partition(address, content):
     # create a socket object
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -22,6 +24,25 @@ def send_partition(address, content):
     s.sendall(content.encode('ascii'))
     s.close()
     return
+
+def recv_partitions(a,b,c):
+    # create a socket object
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    # get local machine name
+    host = a
+    port = b
+    # print(address)
+    # connection to hostname on the port.
+    s.connect((host, port))
+    # print(content)
+    # Receive no more than 1024 bytes
+    # msg = s.recv(1024)
+    # s.close()
+    # print(msg.decode('ascii'))
+    partition=s.recv(1024).decode('ascii')
+    partitions.append(partition)
+    # print(partition)
+    return partition
 
 def writeop(filename):
     with open(filename, 'r') as file:
@@ -44,7 +65,7 @@ def writeop(filename):
                 k.append(content[j])
             for j in range(l,n):
                 k.append('')
-        nodes_available = mn.nodesdict(n, filename)
+        nodes_available = mn.nodesdictwrite(n, filename)
         print(content)
         for i in range(len(nodes_available.keys())):
             print("Sending data to node: ", nodes_available[i])
@@ -52,6 +73,8 @@ def writeop(filename):
             send_thread=threading.Thread(target=send_partition,args=(nodes_available[i],k[i]))
             send_thread.start()
             # send_partition(nodes_available[i], content)
+
+
 
 #reading a file filename given as command line argument
 print("FOR WRITE OPERATION: 1\n FOR READ OPERATION: 2\n FOR MR OPERATION: 3")
