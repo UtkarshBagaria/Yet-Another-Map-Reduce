@@ -7,4 +7,4 @@ def nodesdict(n=2,filename="xyz"):
         connec=threading.Thread(target=w.conne,args=(a[i][0],a[i][1],a[i][2]))
         connec.start()
     return a
-import worker as w
+import WorkerNode as w
