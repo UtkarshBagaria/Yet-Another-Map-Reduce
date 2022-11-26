@@ -1,6 +1,7 @@
 import socket
 import threading
-def conne(a,b,c):
+# import time
+def conne(a,b,c,op):
     # print("hello")
     host=a
     port=b
@@ -17,11 +18,27 @@ def conne(a,b,c):
             # client.send("Connected".encode('ascii'))
             partition=client.recv(1024).decode('ascii')
             # write to file
-            with open(fn,'a') as f:
+            with open(fn,'w') as f:
                 f.write(partition)
             client.close()
             return partition
-    rec_partition()
+    def sends_partition():
+        # print("hello")
+        while True:
+            client,address=server.accept()
+            # print("Connected to ",str(address))
+            # client.send("Connected".encode('ascii'))
+            # print(fn)
+            with open(fn,'r') as f:
+                partition=f.read()
+                partition=fn+" "+partition
+            # time.sleep(1)
+            client.send(partition.encode('ascii'))
+            client.close()
+    if(op=='w'):
+        rec_partition()
+    elif op=='r':
+        sends_partition()
 
 # connec=threading.Thread(target=conne,args=())
 # connec.start()
