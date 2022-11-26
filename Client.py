@@ -3,6 +3,7 @@ import sys
 import MasterNode as mn
 import socket
 import threading
+import math
 
 def send_partition(address, content):
     # create a socket object
@@ -30,11 +31,19 @@ def writeop(filename):
         ldw=l//n
         k=[]
         j=0
-        for i in range(0,l,ldw):
-            st=''
-            for j in range(0,ldw):
-                st=st+content[i+j]
-            k.append(st)
+        if l>=n:
+                for i in range(0,l,ldw):
+                    st=''
+                    for j in range(0,ldw):
+                        if(i+j<l):
+                            st=st+content[i+j]
+                        # st=st+content[i+j]
+                    k.append(st)
+        else:
+            for j in range(0,l):
+                k.append(content[j])
+            for j in range(l,n):
+                k.append('')
         nodes_available = mn.nodesdict(n, filename)
         print(content)
         for i in range(len(nodes_available.keys())):
@@ -43,7 +52,7 @@ def writeop(filename):
             send_thread=threading.Thread(target=send_partition,args=(nodes_available[i],k[i]))
             send_thread.start()
             # send_partition(nodes_available[i], content)
-            
+
 #reading a file filename given as command line argument
 print("FOR WRITE OPERATION: 1\n FOR READ OPERATION: 2\n FOR MR OPERATION: 3")
 choice = int(input("Enter your choice: "))
