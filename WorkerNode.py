@@ -1,7 +1,8 @@
 import socket
 import threading
+import os
 # import time
-def conne(a,b,c,op):
+def conne(a,b,c,op,mrf=""):
     # print("hello")
     host=a
     port=b
@@ -9,7 +10,7 @@ def conne(a,b,c,op):
     server=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     server.bind((host,port))
     server.listen()
-    print("Server is listening at ",host,port)
+    print("Worker is listening at ",host,port)
     def rec_partition():
         # print("hello")
         while True:
@@ -35,10 +36,18 @@ def conne(a,b,c,op):
             # time.sleep(1)
             client.send(partition.encode('ascii'))
             client.close()
+    def send_mapper(mrf):
+            # print("execute mapper")
+            partnum=str(port-23333)
+            os.system("python "+mrf+"< "+fn+" > "+"intermediate/output"+partnum+".txt")
+            # print("mapper executed")
     if(op=='w'):
         rec_partition()
     elif op=='r':
         sends_partition()
+    elif op=='m':
+        # print("taken mapper")
+        send_mapper(mrf)
 
 # connec=threading.Thread(target=conne,args=())
 # connec.start()
