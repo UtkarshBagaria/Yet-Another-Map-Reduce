@@ -1,6 +1,8 @@
 import threading
 import json
+import socket
 import WorkerNode as w
+
 def nodesdictwrite(n=2,filename="xyz"):
     a=dict()
     filename, file_extension = filename.split(".")
@@ -26,3 +28,21 @@ def nodesdictread(n=2,filename="xyz"):
         connec.start()
         # time.sleep(1)
     return a
+
+def MN_Client_establish_connection():
+    server=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    server.bind(('127.0.0.1',33333))
+    server.listen()
+    print("MasterNode is listening at ",'127.0.0.1',33333)
+    while True:
+        client,address=server.accept()
+        # print("Connected to ",str(address))
+        # client.send("Connected".encode('ascii'))
+        n=client.recv(1024).decode('ascii')
+        filename=client.recv(1024).decode('ascii')
+        a=nodesdictwrite(int(n),filename)
+        print(a)
+        client.send((str(a)).encode('ascii'))
+        client.close()
+
+MN_Client_establish_connection()

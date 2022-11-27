@@ -1,10 +1,30 @@
 #client func
 import sys
-import MasterNode as mn
+# import MasterNode as mn
 import socket
 import threading
 import math
 
+def client_MN_establish_connection(content):
+    # create a socket object
+    # print("helloji")
+    cm = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    # get local machine name
+    host = '127.0.0.1'
+    port = 33333
+    # bind to the port
+    # get local machine name
+    # connection to hostname on the port.
+    cm.connect((host, port))
+    # queue up to 5 requests
+    print(content)
+    cm.send(str(content[0]).encode('ascii'))
+    cm.send(str(content[1]).encode('ascii'))
+    a=cm.recv(1024).decode('ascii')
+    cm.close()
+    # print(a)
+    # print(type(eval(a)))
+    return eval(a)
 global partitions
 partitions=[]
 def send_partition(address, content):
@@ -65,7 +85,7 @@ def writeop(filename):
                 k.append(content[j])
             for j in range(l,n):
                 k.append('')
-        nodes_available = mn.nodesdictwrite(n, filename)
+        nodes_available = client_MN_establish_connection([n, filename])
         print(content)
         for i in range(len(nodes_available.keys())):
             print("Sending data to node: ", nodes_available[i])
@@ -110,11 +130,12 @@ elif choice==2:
     for i in partitions:
         b=i.split(' ',1)
         print(b[1])
-else:
+elif choice==3:
     filename = sys.argv[1]
     mapfile = sys.argv[2]
     reducefile = sys.argv[3]
     n=sys.argv[4]
+    # mapperop(filename,mapfile,n)
 
 # User passes the input file to the client program to be stored in the cluster.
 # The client contacts the master node to schedule the WRITE operation.
