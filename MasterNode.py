@@ -1,7 +1,6 @@
 import threading
 import json
 import socket
-import WorkerNode as w
 
 def nodesdictwrite(n=2,filename="xyz"):
     a=dict()
@@ -10,7 +9,7 @@ def nodesdictwrite(n=2,filename="xyz"):
         a[i]=["127.0.0.1",23333+i,filename+str(i)+"."+file_extension]
         connec=threading.Thread(target=w.conne,args=(a[i][0],a[i][1],a[i][2],'w'))
         connec.start()
-    fw=open('metadata.txt','a')
+    fw=open('metadata.txt','w')
     fw.write(filename+" "+json.dumps(a))
     return a
 
@@ -52,5 +51,8 @@ def MN_Client_establish_connection():
         # print(a)
         # client.send((str(a)).encode('ascii'))
         client.close()
+    
 
+
+import WorkerNode as w
 MN_Client_establish_connection()

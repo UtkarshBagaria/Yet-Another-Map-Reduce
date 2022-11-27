@@ -1,6 +1,5 @@
-#client func
 import sys
-# import MasterNode as mn
+# import masternode as mn
 import socket
 import threading
 import math
@@ -24,7 +23,7 @@ def client_MN_establish_connection(content):
     a=cm.recv(1024).decode('ascii')
     cm.close()
     # print(a)
-    # print(type(eval(a)))
+    print(type(eval(a)))
     return eval(a)
 global partitions
 partitions=[]
@@ -86,12 +85,13 @@ def writeop(filename):
                 k.append(content[j])
             for j in range(l,n):
                 k.append('')
+        print("hi")
         nodes_available = client_MN_establish_connection([n, filename,1])
-        print(content)
+        print("below the call",type(nodes_available))
         for i in range(len(nodes_available.keys())):
-            print("Sending data to node: ", nodes_available[i])
+            print("Sending data to node: ", nodes_available[str(i)])
             # sending partition to the address in nodes_available with the partition name
-            send_thread=threading.Thread(target=send_partition,args=(nodes_available[i],k[i]))
+            send_thread=threading.Thread(target=send_partition,args=(nodes_available[str(i)],k[i]))
             send_thread.start()
             # send_partition(nodes_available[i], content)
 
@@ -114,8 +114,26 @@ def readop(filename):
         # res=recv_thread.join()
         # print(res)
         # send_partition(nodes_available[i], content)
+    
+def mapperop(filename):
+    nodes_available = mn.nodesdictread(n, filename)
+    # print(nodes_available['0'])
+    recv_thread=[]
+    for i in range(0,len(nodes_available.keys())):
+        # print("Sending data to node: ", nodes_available[i])
+        # print(nodes_available[str(i)])
+        # sending partition to the address in nodes_available with the partition name
+        recv_thread.append(threading.Thread(target=recv_partitions,args=(nodes_available[str(i)][0],nodes_available[str(i)][1],nodes_available[str(i)][2])))
+    for i in range(0,len(recv_thread)):
+        recv_thread[i].start()
+    for i in range(0,len(recv_thread)):
+        recv_thread[i].join() 
+    # for i in partitions:
+    #     a,b=i.split(' ',1)
 
-
+        # res=recv_thread.join()
+        # print(res)
+        # send_partition(nodes_available[i], content)
 #reading a file filename given as command line argument
 print("FOR WRITE OPERATION: 1\n FOR READ OPERATION: 2\n FOR MR OPERATION: 3")
 choice = int(input("Enter your choice: "))
@@ -136,9 +154,9 @@ elif choice==3:
     mapfile = sys.argv[2]
     reducefile = sys.argv[3]
     n=sys.argv[4]
-    # mapperop(filename,mapfile,n)
+    mapperop(filename,mapfile,n)
 
-# User passes the input file to the client program to be stored in the cluster.
-# The client contacts the master node to schedule the WRITE operation.
-# The master node returns a list of worker nodes that the client has to write the data to.
-# Based on the list, the client program splits the input file into equally sized partitions and contacts the workers to store their respective partitions to the workers storage. After the client has successfully written the data to all the workers, client informs the user that the WRITE operation is successful.
+# send_thread=threading.Thread(target=send_partition,args=())
+# send_thread.start()
+
+
