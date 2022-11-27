@@ -10,17 +10,16 @@ def client_MN_establish_connection(content):
     cm = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     # get local machine name
     host = '127.0.0.1'
-    port = 33333
+    port = 55555
     # bind to the port
     # get local machine name
     # connection to hostname on the port.
     cm.connect((host, port))
     # queue up to 5 requests
-    print(content)
-    cm.send(str(content[0]).encode('ascii'))
-    cm.send(str(content[1]).encode('ascii'))
-    cm.send(str(content[2]).encode('ascii'))
+    # print(content)
+    cm.sendall(content.encode('ascii'))
     a=cm.recv(1024).decode('ascii')
+    print("Hello")
     cm.close()
     # print(a)
     print(type(eval(a)))
@@ -86,7 +85,7 @@ def writeop(filename):
             for j in range(l,n):
                 k.append('')
         print("hi")
-        nodes_available = client_MN_establish_connection([n, filename,1])
+        nodes_available = client_MN_establish_connection(str(n)+' '+filename+" 1")
         print("below the call",type(nodes_available))
         for i in range(len(nodes_available.keys())):
             print("Sending data to node: ", nodes_available[str(i)])
@@ -96,7 +95,7 @@ def writeop(filename):
             # send_partition(nodes_available[i], content)
 
 def readop(filename):
-    nodes_available =client_MN_establish_connection([n, filename,2])
+    nodes_available =client_MN_establish_connection(str(n)+' '+ filename+' 2')
     # print(nodes_available['0'])
     recv_thread=[]
     for i in range(0,len(nodes_available.keys())):
@@ -114,20 +113,7 @@ def readop(filename):
         # res=recv_thread.join()
         # print(res)
         # send_partition(nodes_available[i], content)
-    
-def mapperop(filename):
-    nodes_available = mn.nodesdictread(n, filename)
-    # print(nodes_available['0'])
-    recv_thread=[]
-    for i in range(0,len(nodes_available.keys())):
-        # print("Sending data to node: ", nodes_available[i])
-        # print(nodes_available[str(i)])
-        # sending partition to the address in nodes_available with the partition name
-        recv_thread.append(threading.Thread(target=recv_partitions,args=(nodes_available[str(i)][0],nodes_available[str(i)][1],nodes_available[str(i)][2])))
-    for i in range(0,len(recv_thread)):
-        recv_thread[i].start()
-    for i in range(0,len(recv_thread)):
-        recv_thread[i].join() 
+     
     # for i in partitions:
     #     a,b=i.split(' ',1)
 
@@ -154,7 +140,7 @@ elif choice==3:
     mapfile = sys.argv[2]
     reducefile = sys.argv[3]
     n=sys.argv[4]
-    mapperop(filename,mapfile,n)
+    # mapperop(filename,mapfile,n)
 
 # send_thread=threading.Thread(target=send_partition,args=())
 # send_thread.start()

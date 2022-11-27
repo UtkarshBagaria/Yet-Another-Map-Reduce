@@ -30,16 +30,23 @@ def nodesdictread(n=2,filename="xyz"):
 
 def MN_Client_establish_connection():
     server=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-    server.bind(('127.0.0.1',33333))
+    server.bind(('127.0.0.1',55555))
     server.listen()
-    print("MasterNode is listening at ",'127.0.0.1',33333)
+    print("MasterNode is listening at ",'127.0.0.1',55555)
     while True:
         client,address=server.accept()
+        # print("listening")
         # print("Connected to ",str(address))
         # client.send("Connected".encode('ascii'))
-        n=client.recv(1024).decode('ascii')
-        filename=client.recv(1024).decode('ascii')
-        op=client.recv(1024).decode('ascii')
+        r=client.recv(1024).decode('ascii')
+        # print(r)
+        n,filename,op=r.split(" ")
+        # filename=client.recv(1024).decode('ascii')
+        # op=client.recv(1024).decode('ascii')
+        n=int(n)
+        op=int(op)
+        # print(type(op))
+        # print(op)
         if(int(op)==1):
             a=nodesdictwrite(int(n),filename)
             client.send(json.dumps(a).encode('ascii'))
