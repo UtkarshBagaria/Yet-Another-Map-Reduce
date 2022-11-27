@@ -28,6 +28,25 @@ def nodesdictread(n=2,filename="xyz"):
         # time.sleep(1)
     return a
 
+def nodesformap(n=2,filename="xyz"):
+    a=dict()
+    # print(filename)
+    filename, file_extension = filename.split(".")
+    fw=open('metadata.txt','r')
+    for line in fw:
+        if filename in line:
+            a=json.loads(line.split(" ",1)[1])
+            # print(a)
+    return a
+
+def maptopartition(a,mrf):
+    for i in a.keys():
+        connec=threading.Thread(target=w.conne,args=(a[i][0],a[i][1],a[i][2],'m',mrf))
+        connec.start()
+        print("ACK mapper from port: ",a[i][1])
+        # time.sleep(1)
+    return a
+
 def MN_Client_establish_connection():
     server=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     server.bind(('127.0.0.1',55555))
@@ -40,25 +59,37 @@ def MN_Client_establish_connection():
         # client.send("Connected".encode('ascii'))
         r=client.recv(1024).decode('ascii')
         # print(r)
-        n,filename,op=r.split(" ")
-        # filename=client.recv(1024).decode('ascii')
-        # op=client.recv(1024).decode('ascii')
-        n=int(n)
-        op=int(op)
-        # print(type(op))
+        op1=r.split(" ")
+        filename=op1[1]
+        n=int(op1[0])
+        op=int(op1[2])
+        # n=int(n)
+        # op=int(op)
         # print(op)
+        # print(n,filename,op)
         if(int(op)==1):
             a=nodesdictwrite(int(n),filename)
             client.send(json.dumps(a).encode('ascii'))
         elif(int(op)==2):
             a=nodesdictread(int(n),filename)
             client.send(json.dumps(a).encode('ascii'))
+        else:
+            mrf=op1[3]
+            if(int(op)==3):
+                a=nodesformap(int(n),filename)
+                # client.send(json.dumps(a).encode('ascii'))
+                maptopartition(a,mrf)
+                xyz = {'Map':'Done'}
+                client.send(json.dumps(xyz).encode('ascii'))
+                # print("map",mrf)
+            elif(int(op)==4):
+                print("reduce",mrf)
 
         # a=nodesdictwrite(int(n),filename)
         # print(a)
         # client.send((str(a)).encode('ascii'))
         client.close()
-    
+
 
 
 import WorkerNode as w
