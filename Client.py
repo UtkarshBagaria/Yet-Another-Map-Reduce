@@ -19,10 +19,10 @@ def client_MN_establish_connection(content):
     # print(content)
     cm.sendall(content.encode('ascii'))
     a=cm.recv(1024).decode('ascii')
-    print("Hello")
+    # print("Hello")
     cm.close()
     # print(a)
-    print(type(eval(a)))
+    # print(type(eval(a)))
     return eval(a)
 global partitions
 partitions=[]
@@ -84,9 +84,9 @@ def writeop(filename):
                 k.append(content[j])
             for j in range(l,n):
                 k.append('')
-        print("hi")
+        # print("hi")
         nodes_available = client_MN_establish_connection(str(n)+' '+filename+" 1")
-        print("below the call",type(nodes_available))
+        # print("below the call",type(nodes_available))
         for i in range(len(nodes_available.keys())):
             print("Sending data to node: ", nodes_available[str(i)])
             # sending partition to the address in nodes_available with the partition name
@@ -113,13 +113,19 @@ def readop(filename):
         # res=recv_thread.join()
         # print(res)
         # send_partition(nodes_available[i], content)
-     
+    
     # for i in partitions:
     #     a,b=i.split(' ',1)
 
         # res=recv_thread.join()
         # print(res)
         # send_partition(nodes_available[i], content)
+
+def mapperop(filename, mapper):
+    print(filename,mapper)
+    writeop(filename)
+    nodes_available =client_MN_establish_connection(str(n)+' '+ filename+' 3 '+mapper)
+    pass
 #reading a file filename given as command line argument
 print("FOR WRITE OPERATION: 1\n FOR READ OPERATION: 2\n FOR MR OPERATION: 3")
 choice = int(input("Enter your choice: "))
@@ -139,8 +145,8 @@ elif choice==3:
     filename = sys.argv[1]
     mapfile = sys.argv[2]
     reducefile = sys.argv[3]
-    n=sys.argv[4]
-    # mapperop(filename,mapfile,n)
+    n=int(sys.argv[4])
+    mapperop(filename,mapfile)
 
 # send_thread=threading.Thread(target=send_partition,args=())
 # send_thread.start()
