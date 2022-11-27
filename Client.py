@@ -20,6 +20,7 @@ def client_MN_establish_connection(content):
     print(content)
     cm.send(str(content[0]).encode('ascii'))
     cm.send(str(content[1]).encode('ascii'))
+    cm.send(str(content[2]).encode('ascii'))
     a=cm.recv(1024).decode('ascii')
     cm.close()
     # print(a)
@@ -95,7 +96,7 @@ def writeop(filename):
             # send_partition(nodes_available[i], content)
 
 def readop(filename):
-    nodes_available = mn.nodesdictread(n, filename)
+    nodes_available =client_MN_establish_connection([n, filename,2])
     # print(nodes_available['0'])
     recv_thread=[]
     for i in range(0,len(nodes_available.keys())):

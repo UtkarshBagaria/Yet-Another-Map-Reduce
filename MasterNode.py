@@ -40,9 +40,17 @@ def MN_Client_establish_connection():
         # client.send("Connected".encode('ascii'))
         n=client.recv(1024).decode('ascii')
         filename=client.recv(1024).decode('ascii')
-        a=nodesdictwrite(int(n),filename)
-        print(a)
-        client.send((str(a)).encode('ascii'))
+        op=client.recv(1024).decode('ascii')
+        if(int(op)==1):
+            a=nodesdictwrite(int(n),filename)
+            client.send(json.dumps(a).encode('ascii'))
+        elif(int(op)==2):
+            a=nodesdictread(int(n),filename)
+            client.send(json.dumps(a).encode('ascii'))
+
+        # a=nodesdictwrite(int(n),filename)
+        # print(a)
+        # client.send((str(a)).encode('ascii'))
         client.close()
 
 MN_Client_establish_connection()
