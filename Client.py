@@ -86,7 +86,7 @@ def writeop(filename):
                 k.append(content[j])
             for j in range(l,n):
                 k.append('')
-        nodes_available = client_MN_establish_connection([n, filename])
+        nodes_available = client_MN_establish_connection([n, filename,1])
         print(content)
         for i in range(len(nodes_available.keys())):
             print("Sending data to node: ", nodes_available[i])
