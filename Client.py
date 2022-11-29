@@ -126,6 +126,13 @@ def mapperop(filename, mapper):
     writeop(filename)
     nodes_available =client_MN_establish_connection(str(n)+' '+ filename+' 3 '+mapper)
     pass
+
+def hashop():
+    nodes_available =client_MN_establish_connection(str(n)+' '+ filename+' 5')
+    pass
+def reduceop(reducer):
+    nodes_available =client_MN_establish_connection(str(n)+' '+ filename+' 4 '+reducer)
+    pass
 #reading a file filename given as command line argument
 print("FOR WRITE OPERATION: 1\n FOR READ OPERATION: 2\n FOR MR OPERATION: 3")
 choice = int(input("Enter your choice: "))
@@ -147,6 +154,8 @@ elif choice==3:
     reducefile = sys.argv[3]
     n=int(sys.argv[4])
     mapperop(filename,mapfile)
+    hashop()
+    reduceop(reducefile)
 
 # send_thread=threading.Thread(target=send_partition,args=())
 # send_thread.start()
