@@ -40,10 +40,39 @@ def nodesformap(n=2,filename="xyz"):
     return a
 
 def maptopartition(a,mrf):
+    connec=[]
     for i in a.keys():
-        connec=threading.Thread(target=w.conne,args=(a[i][0],a[i][1],a[i][2],'m',mrf))
+        connec.append(threading.Thread(target=w.conne,args=(a[i][0],a[i][1],a[i][2],'m',mrf)))
+    for i in connec:
+        i.start()
+    c=0
+    for i in connec:
+        i.join()
+        print("ACK mapper from port: ",a[str(c)][1])
+        c+=1
+    # connec.start()
+    # print("ACK mapper from port: ",a[i][1])
+        # time.sleep(1)
+    return a
+
+def reduceforpartition(a,mrf):
+    for i in a.keys():
+        connec=threading.Thread(target=w.conne,args=(a[i][0],a[i][1],a[i][2],'red',mrf))
         connec.start()
-        print("ACK mapper from port: ",a[i][1])
+        print("ACK reducer from port: ",a[i][1])
+        # time.sleep(1)
+    return a
+
+def hashpartition(a):
+    no=len(a.keys())
+    # print("THIS IS MODULO IN THE MASTER NODE",no)
+    connec=[]
+    for i in a:
+        connec.append(threading.Thread(target=w.conne,args=(a[i][0],a[i][1],no,'shh')))
+    for i in connec:
+        i.start()
+    for i in connec:
+        i.join()
         # time.sleep(1)
     return a
 
@@ -74,16 +103,24 @@ def MN_Client_establish_connection():
             a=nodesdictread(int(n),filename)
             client.send(json.dumps(a).encode('ascii'))
         else:
-            mrf=op1[3]
+            # mrf=op1[3]
             if(int(op)==3):
                 a=nodesformap(int(n),filename)
                 # client.send(json.dumps(a).encode('ascii'))
-                maptopartition(a,mrf)
+                maptopartition(a,op1[3])
                 xyz = {'Map':'Done'}
                 client.send(json.dumps(xyz).encode('ascii'))
                 # print("map",mrf)
             elif(int(op)==4):
-                print("reduce",mrf)
+                reduceforpartition(a,op1[3])
+                xyz = {'Reduce':'Done'}
+                client.send(json.dumps(xyz).encode('ascii'))
+                # print("reduce",mrf)
+            elif(int(op)==5):
+                hashpartition(a)
+                xyz = {'Hash':'Done'}
+                client.send(json.dumps(xyz).encode('ascii'))
+                # print("hash")
 
         # a=nodesdictwrite(int(n),filename)
         # print(a)
