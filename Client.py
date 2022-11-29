@@ -3,6 +3,7 @@ import sys
 import socket
 import threading
 import math
+import os 
 
 def client_MN_establish_connection(content):
     # create a socket object
@@ -63,15 +64,19 @@ def recv_partitions(a,b,c):
     # print(partition)
     return partition
 
+def distribute(l,n):
+    return [l//n + (1 if x<l%n else 0) for x in range(n)]
+
 def writeop(filename):
     with open(filename, 'r') as file:
         content = file.readlines()
         # content=content[0]
         l=len(content)
         ldw=math.ceil(l/n)
+        # ldw=distribute(l,n)
         k=[]
         j=0
-        if l>=n:
+        if l==n:
                 for i in range(0,l,ldw):
                     st=''
                     for j in range(0,ldw):
@@ -79,6 +84,15 @@ def writeop(filename):
                             st=st+content[i+j]
                         # st=st+content[i+j]
                     k.append(st)
+        elif l>n:
+            c=0
+            lif=distribute(l,n)
+            for i in lif:
+                st=''
+                for j in range(0,i):
+                    st=st+content[c]
+                    c=c+1
+                k.append(st)
         else:
             for j in range(0,l):
                 k.append(content[j])
@@ -87,12 +101,19 @@ def writeop(filename):
         # print("hi")
         nodes_available = client_MN_establish_connection(str(n)+' '+filename+" 1")
         # print("below the call",type(nodes_available))
+        print("LINE 94 k",k)
+        print(len(k))
         for i in range(len(nodes_available.keys())):
             print("Sending data to node: ", nodes_available[str(i)])
             # sending partition to the address in nodes_available with the partition name
             send_thread=threading.Thread(target=send_partition,args=(nodes_available[str(i)],k[i]))
             send_thread.start()
             # send_partition(nodes_available[i], content)
+
+#distribute l amongst n equally and return a list of n elements
+
+
+
 
 def readop(filename):
     if(choice==2):
@@ -137,6 +158,12 @@ def reduceop(reducer):
     nodes_available =client_MN_establish_connection(str(n)+' '+ filename+' 4 '+reducer)
     pass
 #reading a file filename given as command line argument
+os.system("rmdir /s /q intermediate")
+os.system("mkdir intermediate")
+os.system("rmdir /s /q shuffle")
+os.system("mkdir shuffle")
+os.system("rmdir /s /q final")
+os.system("mkdir final")
 print("FOR WRITE OPERATION: 1\n FOR READ OPERATION: 2\n FOR MR OPERATION: 3")
 choice = int(input("Enter your choice: "))
 if choice == 1: 

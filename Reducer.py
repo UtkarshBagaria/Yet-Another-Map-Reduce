@@ -5,7 +5,7 @@ word=""
 count = 1
 for line in sys.stdin:
     line = line.strip()
-    current_word, c = line.rsplit(",", 1)
+    current_word, c = line.rsplit(",")
     if word !=current_word:
         if(word !=""):
             print(f"{word} {count}")
