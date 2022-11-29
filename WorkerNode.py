@@ -77,7 +77,7 @@ def conne(a,b,c,op,mrf=""):
         with open(mfn,'r') as f:
             lines=f.readlines()
             lines.sort()
-            print(lines)
+            # print(lines)
         f.close()
         with open(mfn,'w') as f:
             f.writelines(lines)
