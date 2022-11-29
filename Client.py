@@ -95,7 +95,10 @@ def writeop(filename):
             # send_partition(nodes_available[i], content)
 
 def readop(filename):
-    nodes_available =client_MN_establish_connection(str(n)+' '+ filename+' 2')
+    if(choice==2):
+        nodes_available =client_MN_establish_connection(str(n)+' '+ filename+' 2')
+    else:
+        nodes_available =client_MN_establish_connection(str(n)+' '+ filename+' 6')
     # print(nodes_available['0'])
     recv_thread=[]
     for i in range(0,len(nodes_available.keys())):
@@ -156,7 +159,26 @@ elif choice==3:
     mapperop(filename,mapfile)
     hashop()
     reduceop(reducefile)
-
+    readop("final/output.txt")
+    # partitions=sorted(partitions)
+    # print(len(partitions))
+    out=[]
+    for i in partitions:
+        # print((i.split(' ',1)[1]))
+        abc=i.split(' ',1)[1]
+        abc=abc.split('\n')
+        for j in abc:
+            out.append(j)
+    out=sorted(out)
+    # out1=[]
+    # for i in out:
+    #     abc=(i.split('\n'))
+    #     for j in abc:
+    #         out1.append(j)
+    for i in out:
+        print(i)
+        # pass
+    
 # send_thread=threading.Thread(target=send_partition,args=())
 # send_thread.start()
 
