@@ -123,6 +123,11 @@ def MN_Client_establish_connection():
                 a=nodesformap(int(n),filename)
                 # client.send(json.dumps(a).encode('ascii'))
                 maptopartition(a,op1[3])
+                for i in range(n):
+                    file = 'shuffle/output'+str(i)+".txt"
+                    open(file, 'w').close()
+                    file = 'final/output'+str(i)+".txt"
+                    open(file, 'w').close()
                 xyz = {'Map':'Done'}
                 client.send(json.dumps(xyz).encode('ascii'))
                 # print("map",mrf)
