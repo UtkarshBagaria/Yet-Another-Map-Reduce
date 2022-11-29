@@ -13,20 +13,28 @@ def nodesdictwrite(n=2,filename="xyz"):
     fw.write(filename+" "+json.dumps(a))
     return a
 
-def nodesdictread(n=2,filename="xyz"):
+def nodesdictread(n=2,filename="xyz",op=-1):
     a=dict()
     # print(filename)
-    filename, file_extension = filename.split(".")
-    fw=open('metadata.txt','r')
-    for line in fw:
-        if filename in line:
-            a=json.loads(line.split(" ",1)[1])
-            # print(a)
-    for i in a:
-        connec=threading.Thread(target=w.conne,args=(a[i][0],a[i][1],a[i][2],'r'))
-        connec.start()
-        # time.sleep(1)
-    return a
+    if(op!=69):
+        filename, file_extension = filename.split(".")
+        fw=open('metadata.txt','r')
+        for line in fw:
+            if filename in line:
+                a=json.loads(line.split(" ",1)[1])
+                # print(a)
+        for i in a:
+            connec=threading.Thread(target=w.conne,args=(a[i][0],a[i][1],a[i][2],'r'))
+            connec.start()
+            # time.sleep(1)
+        return a
+    else:
+        filename, file_extension = filename.split(".")
+        for i in range(n):
+            connec=threading.Thread(target=w.conne,args=("127.0.0.1",23333+i,filename+str(i)+"."+file_extension,'r'))
+            connec.start()
+            a[i]=["127.0.0.1",23333+i,filename+str(i)+file_extension]
+        return a
 
 def nodesformap(n=2,filename="xyz"):
     a=dict()
@@ -56,10 +64,17 @@ def maptopartition(a,mrf):
     return a
 
 def reduceforpartition(a,mrf):
+    connec=[]
     for i in a.keys():
-        connec=threading.Thread(target=w.conne,args=(a[i][0],a[i][1],a[i][2],'red',mrf))
-        connec.start()
-        print("ACK reducer from port: ",a[i][1])
+        connec.append(threading.Thread(target=w.conne,args=(a[i][0],a[i][1],a[i][2],'red',mrf)))
+    for i in connec:
+        i.start()
+    c=0
+    for i in connec:
+        i.join()
+        print("ACK reducer from port: ",23333+c)
+        # connec.start()
+        # print("ACK reducer from port: ",a[i][1])
         # time.sleep(1)
     return a
 
@@ -115,13 +130,17 @@ def MN_Client_establish_connection():
                 reduceforpartition(a,op1[3])
                 xyz = {'Reduce':'Done'}
                 client.send(json.dumps(xyz).encode('ascii'))
+                # nodesdictread(int(n),filename,69)
                 # print("reduce",mrf)
             elif(int(op)==5):
                 hashpartition(a)
                 xyz = {'Hash':'Done'}
                 client.send(json.dumps(xyz).encode('ascii'))
                 # print("hash")
-
+            elif(int(op)==6):
+                a=nodesdictread(int(n),filename,69)
+                client.send(json.dumps(a).encode('ascii'))
+                # print("read")
         # a=nodesdictwrite(int(n),filename)
         # print(a)
         # client.send((str(a)).encode('ascii'))
