@@ -27,11 +27,13 @@
 4. Start the Client with the name of file to be written and the number of worker nodes 
     <code>python Client.py filename no_of_worker</code>
 For example
-    <code>python Client.py test.txt 6</code>
-Where test.txt is the file to be written and 6 is the number of worker nodes
+    <code>python Client.py test.txt 2</code>
+Where test.txt is the file to be written and 2 is the number of worker nodes
 5. Choose 1 in the menu to write the file
 6. Ensure that the terminal of MasterNode is closed before starting a new operation  
 </pre>
+![image](https://user-images.githubusercontent.com/79400700/204832390-e7eae723-40fe-4392-8bd6-1e76270c5348.png)
+![image](https://user-images.githubusercontent.com/79400700/204832573-f34191d9-5f4f-4cb4-a7bd-657e0843c67c.png)
 
 ## Read Operation
 
@@ -43,12 +45,13 @@ Where test.txt is the file to be written and 6 is the number of worker nodes
 10. Start the Client with the name of file to be read and the number of worker nodes 
     <code>python Client.py filename no_of_worker</code>
 For example
-    <code>python Client.py test.txt 6</code>
-Where test.txt is the file to be read and 6 is the number of worker nodes
+    <code>python Client.py test.txt 2</code>
+Where test.txt is the file to be read and 2 is the number of worker nodes
 11. Choose 2 in the menu to read the file
 12. Output will be displayed on the terminal
 12. Ensure that the terminal of MasterNode is closed before starting a new operation 
 </pre>
+![image](https://user-images.githubusercontent.com/79400700/204832821-bbbdf77b-da67-44c9-9bad-6521da8c1e78.png)
 
 ## Map Reduce Operation
 
@@ -70,3 +73,4 @@ Reducer.py is the reducer
 18. Output will be displayed on the terminal
 19. Ensure that the terminal of MasterNode is closed before starting a new operation 
 </pre>
+![image](https://user-images.githubusercontent.com/79400700/204833749-75376ce1-54fa-45e3-8f37-28391c500de7.png)
