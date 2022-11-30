@@ -175,9 +175,13 @@ elif choice==2:
     n=int(sys.argv[2])
     readop(filename)
     partitions=sorted(partitions)
+    c=0
     for i in partitions:
-        b=i.split(' ',1)
-        print(b[1])
+        partitions[c]=i.split(' ',1)[1]
+        c=c+1
+    res = [ele for ele in partitions if ele.strip()]
+    for i in res:
+        print(i)
 elif choice==3:
     filename = sys.argv[1]
     mapfile = sys.argv[2]
