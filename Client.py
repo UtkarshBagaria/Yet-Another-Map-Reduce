@@ -164,8 +164,8 @@ os.system("rmdir /s /q shuffle")
 os.system("mkdir shuffle")
 os.system("rmdir /s /q final")
 os.system("mkdir final")
-print("FOR WRITE OPERATION: 1\n FOR READ OPERATION: 2\n FOR MR OPERATION: 3")
-choice = int(input("Enter your choice: "))
+print("\nFOR WRITE OPERATION: 1\nFOR READ OPERATION:  2\nFOR MR OPERATION:    3")
+choice = int(input("\nEnter your choice: "))
 if choice == 1: 
     filename = sys.argv[1]
     n=int(sys.argv[2])
