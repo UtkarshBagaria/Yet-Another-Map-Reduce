@@ -109,6 +109,7 @@ def writeop(filename):
             send_thread=threading.Thread(target=send_partition,args=(nodes_available[str(i)],k[i]))
             send_thread.start()
             # send_partition(nodes_available[i], content)
+    print("Write Complete")
 
 #distribute l amongst n equally and return a list of n elements
 
@@ -144,6 +145,7 @@ def readop(filename):
         # res=recv_thread.join()
         # print(res)
         # send_partition(nodes_available[i], content)
+    print("Read Complete")
 
 def mapperop(filename, mapper):
     # print(filename,mapper)
@@ -211,7 +213,8 @@ elif choice==3:
         if(i!=' 1'):
             print(i)
         # pass
-    
+else:
+    print("Invalid Choice")
 # send_thread=threading.Thread(target=send_partition,args=())
 # send_thread.start()
 
