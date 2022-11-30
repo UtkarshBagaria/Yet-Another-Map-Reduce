@@ -101,8 +101,8 @@ def writeop(filename):
         # print("hi")
         nodes_available = client_MN_establish_connection(str(n)+' '+filename+" 1")
         # print("below the call",type(nodes_available))
-        print("LINE 94 k",k)
-        print(len(k))
+        # print("LINE 94 k",k)
+        # print(len(k))
         for i in range(len(nodes_available.keys())):
             print("Sending data to node: ", nodes_available[str(i)])
             # sending partition to the address in nodes_available with the partition name
@@ -201,9 +201,10 @@ elif choice==3:
     # for i in out:
     #     abc=(i.split('\n'))
     #     for j in abc:
-    #         out1.append(j)
-    for i in out:
-        if(i!=' 1\n'):
+    # print(out)
+    res = [ele for ele in out if ele.strip()]
+    for i in res:
+        if(i!=' 1'):
             print(i)
         # pass
     
