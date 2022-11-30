@@ -146,7 +146,7 @@ def readop(filename):
         # send_partition(nodes_available[i], content)
 
 def mapperop(filename, mapper):
-    print(filename,mapper)
+    # print(filename,mapper)
     writeop(filename)
     nodes_available =client_MN_establish_connection(str(n)+' '+ filename+' 3 '+mapper)
     pass
