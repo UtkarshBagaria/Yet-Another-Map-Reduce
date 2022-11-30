@@ -160,12 +160,15 @@ def reduceop(reducer):
     nodes_available =client_MN_establish_connection(str(n)+' '+ filename+' 4 '+reducer)
     pass
 #reading a file filename given as command line argument
-os.system("rmdir /s /q intermediate")
+# os.system("rmdir /s /q intermediate")
 os.system("mkdir intermediate")
-os.system("rmdir /s /q shuffle")
+# os.system("rmdir /s /q shuffle")
 os.system("mkdir shuffle")
-os.system("rmdir /s /q final")
+# os.system("rmdir /s /q final")
 os.system("mkdir final")
+file=sys.argv[1]
+file,fileext = file.split(".")
+os.system("mkdir Store\\"+file)
 print("\nFOR WRITE OPERATION: 1\nFOR READ OPERATION:  2\nFOR MR OPERATION:    3")
 choice = int(input("\nEnter your choice: "))
 if choice == 1: 
@@ -213,6 +216,9 @@ elif choice==3:
         if(i!=' 1'):
             print(i)
         # pass
+    os.system("move intermediate Store/"+file+" >nul")
+    os.system("move shuffle Store/"+file+" >nul")
+    os.system("move final Store/"+file+" >nul")
 else:
     print("Invalid Choice")
 # send_thread=threading.Thread(target=send_partition,args=())
